@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ife</title>
+</head>
+<body>
+    <script>
+        window.onload = function(){
+            var links = '<ul>';
+            for(var i=1; i<10; i++){
+                if(i===1||i===7){
+                    links += '<li>day'+i+'</li>'
+                }else if(i===5){
+                    links += '<li><a href="./day'+i+'/box.html">day'+i+'</a></li>'
+                }else if(i===6){
+                    links += '<li><a href="./day'+i+'/resume.html">day'+i+'</a></li>'
+                }else{
+                    links += '<li><a href="./day'+i+'/index.html">day'+i+'</a></li>'
+                }
+            }
+            links += '</ul>';
+            document.body.innerHTML = links;
+        }
+    </script>
+</body>
+</html>

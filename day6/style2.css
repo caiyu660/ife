@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    overflow: hidden;
+}
+
+h1,h2 {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.header {
+    float: left;
+    width: 200px;
+    background-color: #69a6f7;
+    margin-bottom: -1000px;
+    padding-bottom: 1000px;
+}
+
+.content {
+    margin-left: 220px;
+    /* height: 400px; */
+}
+
+.content > div {
+    margin: 20px 0;
+}
+
+.content > div > div {
+    margin: 20px 0;
+}
+
+.content > div > div span.title {
+    display: block;
+}
+
+span:nth-of-type(2n+1) {
+    font-weight: bold;
+}
+
+.right {
+    float: right;
+    background-color: gray;
+    width: 200px;
+    margin-bottom: -1000px;
+    padding-bottom: 1000px;
+}
