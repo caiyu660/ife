@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>IFE ECMAScript</title>
+    </head>
+    <body>
+        <input id="first-number" type="number" value="0">
+        <input id="second-number" type="number" value="0">
+        <button id="add">+</button>
+        <button id="minus">-</button>
+        <button id="times">*</button>
+        <button id="divide">/</button>
+        <p id="result">result</p>
+        <script>
+            window.onload = function(){
+                document.getElementById("add").onclick = function(){
+                    var first = document.getElementById("first-number").value;
+                    var second = document.getElementById("second-number").value;
+                    document.getElementById("result").innerHTML = parseInt(first) +parseInt(second);
+                }
+            }
+        </script>
+    </body>
+</html>
