@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event</title>
+    <style>
+        select.show {
+            display: block;
+        }
+        select.hide {
+            display: none;
+        }
+
+        .palette {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .palette li {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+
+        #container{
+            width: 480px;
+            height: 480px;
+            background-image: url(http://ife.baidu.com/2016/static/img/erik_ce204002.jpg);
+            background-position: 0 0;
+            background-repeat: no-repeat;
+        }
+
+    </style>
+</head>
+<body>
+    <input id="name" type="text"> 
+    <button id="submit-btn">Submit</button>
+
+    <!--  -->
+    <div id="input-item">
+        <label>
+            <input id="school" value="school-select" name="status" type="radio" checked>
+            School
+        </label>
+        <label>
+            <input id="company" value="company-select" name="status" type="radio">
+            Company
+        </label>
+
+        <select class="hide" id="school-select">        
+            <option>北京邮电大学</option>
+            <option>黑龙江大学</option>
+            <option>华中科技大学</option>
+        </select>
+
+        <select class="hide" id="company-select">        
+            <option>百度</option>
+            <option>爱奇艺</option>        
+        </select>
+    </div>
+
+    <!--  -->
+    <ul class="palette">
+        <li style="background-color:crimson"></li>
+        <li style="background-color:bisque"></li>
+        <li style="background-color:blueviolet"></li>
+        <li style="background-color:coral"></li>
+        <li style="background-color:chartreuse"></li>
+        <li style="background-color:darkolivegreen"></li>
+        <li style="background-color:cyan"></li>
+        <li style="background-color:#194738"></li>        
+    </ul>
+
+    <p class="color-picker"></p>
+
+    <!--  -->
+    <div id="fade-obj" style="width:300px;height:300px;background:#000;opacity: 1;"></div>
+    <button  data-status="out" id="fade-btn">淡出</button>
+
+    <div id="container"></div>
+
+    <script>
+        window.onload = function(){
+            //e1
+            var btn = document.querySelector("#submit-btn"),
+                text = document.querySelector("#name");
+
+            btn.addEventListener('click', function(event){
+                //console.log(event);
+                console.log(text.value);
+            }, false);
+
+            text.addEventListener('keyup', function(event){
+                //console.log(event.keyCode);
+                //console.log(this.value);
+                if(event.keyCode === 27){
+                    event.target.value = '';
+                }else if(event.keyCode === 13){
+                    event.preventDefault();
+                    console.log(event.target.value);
+                }
+            }, false);
+
+            // document.body.addEventListener('click', function(event){
+            //     console.log(event)
+            // }, false);
+
+            //e2
+            document.querySelector("#input-item").addEventListener('click', function(event){
+                var event = window.event || event;
+                var target = event.target || event.srcElement;
+                if(target.nodeName.toLowerCase() === 'input'){
+                    console.log(target.value);
+                    var other = (target.value === "company-select") ? "school-select" : "company-select";
+                    document.getElementById(target.value).className = 'show';
+                    document.getElementById(other).className = 'hide';
+                }
+            }, false);
+            
+            //e3
+            var list = document.querySelectorAll("li");
+            for (var i = 0, len = list.length; i < len; i++) {
+                list[i].onclick = function(e) {
+                    var t = e.target;
+                    var c = t.style.backgroundColor;
+                    var p = document.getElementsByClassName("color-picker")[0]
+                    p.innerHTML = c;
+                    p.style.color = c;
+
+                }
+            }
+
+            //e4
+
+            //e5
+            document.getElementById("fade-btn").addEventListener('click', function(event){
+                event.target.disabled = true;
+                var opacity = parseInt(document.getElementById("fade-obj").style.opacity, 10);
+                var status = event.target.getAttribute('data-status');
+                console.log(status)
+                var intervalId = setInterval(function(){
+                    if(status === 'out'){
+                        opacity = opacity - 0.1;
+                        if(opacity <= 0){
+                            event.target.disabled = false;
+                            event.target.innerHTML = '淡入';
+                            event.target.setAttribute('data-status', 'in');
+                            clearInterval(intervalId);
+                        }
+                    }else{
+                        opacity = opacity + 0.1;
+                        if(opacity >= 1){
+                            event.target.innerHTML = '淡出';
+                            event.target.disabled = false;
+                            event.target.setAttribute('data-status', 'out');
+                            clearInterval(intervalId);
+                        }
+                    }
+                    document.getElementById("fade-obj").style.opacity = opacity;
+                    
+                }, 200);
+            }, false);
+
+            //e6
+            var y = 0;
+            var id = setInterval(function(){
+                document.getElementById("container").style.backgroundPositionY = y + 'px';
+                y -= 480;
+                if(y < -7680){
+                    clearInterval(id);
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
