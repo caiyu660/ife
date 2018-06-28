@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Email</title>
+    <style>
+        ul, li {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        ul {
+            border: 1px solid #bbb;
+        }
+        li {
+            height: 30px;
+            line-height: 30px;
+        }
+        .selected {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text">
+        <ul id="email-sug-wrapper" class="email-sug" style="display: none;"></ul>
+    </div>
+    <script>
+        window.onload = function(){
+            // 邮箱后缀List参考
+            var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+            var email = document.getElementById("email-sug-wrapper");
+            var input = document.getElementById("email-input");
+            var selected = 0;
+            input.focus();
+
+            document.getElementById("email-input").addEventListener('keydown', function(event){
+                if(event.keyCode === 38 || event.keyCode === 40){
+                    event.preventDefault();
+                }
+            },  false);
+
+            document.getElementById("email-input").addEventListener('keyup', function(event){
+                
+                if(event.keyCode!=38 && event.keyCode!=40 && event.keyCode!=13){
+                    //console.log(event.keyCode);
+                    var text = getInputValue(event.target.value);
+                    var lists = generateList(text);
+                    setContent(lists);
+                    toggle(text);
+                }else if(event.keyCode == 38){
+                    if(email.childNodes.length > 0){
+                        var lis = document.getElementsByTagName('li');
+                        lis[selected].className = '';
+
+                        if(selected > 0){
+                            selected--;
+                        }else{
+                            selected = email.childNodes.length - 1;
+                        }
+                        lis[selected].className = 'selected';
+
+                    }else{
+                        console.log('此时没有li shang')
+                    }
+                }else if(event.keyCode == 40){
+                    if(email.childNodes.length > 0){
+                        var lis = document.getElementsByTagName('li');
+                        lis[selected].className = '';
+
+                        if(selected < email.childNodes.length - 1){
+                            selected++;
+                        }else{
+                            selected = 0;
+                        }
+                        lis[selected].className = 'selected';
+                    }else{
+                        console.log('此时没有li xia')
+                    }
+                }else if(event.keyCode == 13){
+                    input.value = document.getElementsByTagName('li')[selected].firstChild.nodeValue;
+                    hide();
+                }
+                
+                
+            }, false);
+
+            function getInputValue(text) {
+                return text.trim();   
+            }
+
+            function generateList(text) {
+                if(text.length === 0) return '';
+
+                var pos = text.indexOf("@");
+                var suffix = '';
+                if(pos!==-1){
+                    suffix = text.slice(pos+1, text.length);
+                    text = text.slice(0, pos);
+                    console.log(suffix)
+                }
+                // var lists =  postfixList.map(function(item, index){
+                //     if(!suffix){
+                //         return "<li>" + text + "@" + item + "</li>";
+                //     }
+                //     var reg = new RegExp('^' + suffix);
+                //     if(reg.test(item)){
+                //         return "<li>" + text + "@" + item + "</li>";
+                //     }
+                // });
+                // console.log(lists);
+                // return lists.join('');
+
+                var lists = '', allLists = '';
+                for(var i = 0, len = postfixList.length; i < len; i++){
+                    var item = postfixList[i];
+                    allLists += "<li>" + text + "@" + item + "</li>";
+
+                    if(!suffix){
+                        lists += "<li>" + text + "@" + item + "</li>";
+                    }else{
+                        var reg = new RegExp('^' + suffix);
+                        if(reg.test(item)){
+                            lists += "<li>" + text + "@" + item + "</li>";
+                        }
+                    }
+                }
+                return lists ? lists : allLists;
+            }
+
+            function setContent(lists) {
+                email.innerHTML = lists;
+                email.firstChild.className = 'selected';
+            }
+
+            function toggle(text) {
+                if (text) {
+                    show();
+                } else {
+                    hide();
+                }
+            }
+
+            function hide() {
+                email.style.display = 'none';
+            }
+
+            function show() {
+                email.style.display = 'block';
+            }
+
+            email.addEventListener('mouseover', function(event){
+                var event = event ? event : window.event;
+                var target = event.target || event.srcElement;
+                console.log(target)
+                if(target.nodeName.toLowerCase() === 'li'){
+                    target.style.backgroundColor = "#bddfe5";
+                }
+            }, false);
+
+            email.addEventListener('mouseout', function(event){
+                var event = event ? event : window.event;
+                var target = event.target || event.srcElement;
+                console.log(target)
+                if(target.nodeName.toLowerCase() === 'li'){
+                    target.style.backgroundColor = "#fff";
+                }
+            }, false);
+
+            email.addEventListener('click', function(event){
+                var event = event ? event : window.event;
+                var target = event.target || event.srcElement;
+                console.log(target)
+                if(target.nodeName.toLowerCase() === 'li'){
+                    input.value = target.firstChild.nodeValue;
+                    hide();
+                    input.focus();
+                }
+            }, false);
+        }
+    </script>
+</body>
+</html>
