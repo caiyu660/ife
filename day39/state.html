@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>state</title>
+</head>
+<body>
+    <button id="a">A</button>
+    <button id="b">B</button>
+    <button id="c">C</button>
+    <div id="cont"></div>
+    <script>
+        window.onload = function(){
+            var a = document.getElementById("a"),
+            b = document.getElementById("b"),
+            c = document.getElementById("c"),
+            cont = document.getElementById("cont");
+
+            a.addEventListener('click', function(){
+                setData('a');
+            }, false);
+            b.addEventListener('click', function(){
+                setData('b');
+            }, false);
+            c.addEventListener('click', function(){
+                setData('c');
+            }, false);
+
+            function setData(v){
+                history.pushState({text:v},'','#'+v);
+                cont.innerHTML = v;
+            }
+
+            window.onpopstate = function(e){
+                console.log(e);
+                cont.innerHTML = e.state ? e.state.text : '';
+            }
+        }
+    </script>
+</body>
+</html>
