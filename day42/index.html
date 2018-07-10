@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.onload = function(){
+
+            function Restaurant(config){
+                this.cash = config.cash || 1000;
+                this.seats = config.seats || 10;
+                this.staff = config.staff || [];
+            }
+
+            Restaurant.prototype.employeeNum = 0;
+
+            Restaurant.prototype.hire = function(person){
+                person.id = ++this.employeeNum;
+                this.staff.push(person);
+            }
+
+            Restaurant.prototype.fire = function(person){
+                var index = 0;
+                for(var i=0,len=this.staff.length; i<len; i++){
+                    if(person.id == this.staff[i].id){
+                        index = i;
+                        break;
+                    }
+                }
+                this.staff.splice(index, 1);
+            }
+
+            var ife = new Restaurant({
+                cash: 1000000,
+                seats: 20,
+                staff: []
+            })
+
+            console.log(ife);
+
+            ife.hire({name:'chris'});
+            ife.hire({name:'tom'});
+            ife.hire({name:'amy'});
+
+            console.log(ife);
+
+            ife.fire({id:2});
+            console.log(ife);
+
+
+
+            function Employee(name, salary){
+                this.name = name;
+                this.salary = salary;
+            }
+
+            Employee.prototype.handle = function(){
+
+            }
+
+            function Waiter(name, salary){
+                Employee.call(this, name, salary);
+            }
+
+            Waiter.prototype = new Employee();
+            Waiter.prototype.constructor = Waiter;
+            Waiter.prototype.handle = function(params){
+                if(Object.prototype.toString.call(params) === "[object Array]"){
+                    console.log('帮客人点菜');
+                }else{
+                    console.log('帮客人上菜');
+                }
+            }
+
+            var s1 = new Waiter('Tony', 10000);
+            var s2 = new Waiter('abc', 9000);
+
+            ife.hire(s1);
+            ife.hire(s2);
+
+            console.log(ife);
+
+            s1.handle();
+            s2.handle([1,2]);
+
+
+
+            function Cook(name, salary){
+                Employee.call(this, name, salary);
+            }
+
+            Cook.prototype = new Employee();
+            Cook.prototype.constructor = Cook;
+            Cook.prototype.handle = function(){
+                console.log('烧菜');
+            }
+
+            var c1 = new Cook('xiaocai', 10000);
+            c1.handle();
+
+
+            function Guest(){
+
+            }
+
+            Guest.prototype.order = function(){
+                console.log('点菜');
+            }
+
+            Guest.prototype.eat = function(){
+                console.log('吃菜');
+            }
+
+            function Goods(name, cost, price){
+                this.name = name;
+                this.cost = cost;
+                this.price = price;
+            }
+        }
+    </script>
+</body>
+</html>
